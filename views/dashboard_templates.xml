@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_dashboard_form" model="ir.ui.view">
+            <field name="name">Dashboard View</field>
+            <field name="model">dashboard.mixin</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Dashboard" create="false" delete="false" edit="false" class="o_dashboard_form">
+                    <div class="o_dashboard_container">
+                        <div class="row o_dashboard_stats">
+                            <div class="col-lg-2 col-md-4">
+                                <div class="o_stat_card">
+                                    <div class="o_stat_value">
+                                        <select id="store_id_select" class="form-select form-select-sm">
+                                            <option value="0" selected="selected">Tất cả cửa hàng</option>
+                                        </select>
+                                    </div>
+                                    <div class="o_stat_label">Cửa hàng</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <div class="o_stat_card">
+                                    <div class="o_stat_value">
+                                        <span id="sales_count">0</span>
+                                    </div>
+                                    <div class="o_stat_label">Số đơn hôm nay</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <div class="o_stat_card">
+                                    <div class="o_stat_value">
+                                        <span id="today_revenue">0 đ</span>
+                                    </div>
+                                    <div class="o_stat_label">Doanh thu hôm nay</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <div class="o_stat_card">
+                                    <div class="o_stat_value">
+                                        <span id="today_profit">0 đ</span>
+                                    </div>
+                                    <div class="o_stat_label">Lợi nhuận hôm nay</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <div class="o_stat_card">
+                                    <div class="o_stat_value">
+                                        <span id="payment_methods_total">0 đ</span>
+                                    </div>
+                                    <div class="o_stat_label">Tổng tiền chưa thanh toán</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <div class="o_stat_card">
+                                    <div class="o_stat_value">
+                                        <span id="table_usage">0/0</span>
+                                    </div>
+                                    <div class="o_stat_label">Bàn đang hoạt động / tổng bàn</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4" id="stores_table_row" style="display: none;">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Thống kê theo cửa hàng</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="dashboard-table">
+                                            <table class="table table-sm table-hover" id="stores_table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Cửa hàng</th>
+                                                        <th class="text-end">Số đơn bán</th>
+                                                        <th class="text-end">Doanh thu</th>
+                                                        <th class="text-end">Giá vốn</th>
+                                                        <th class="text-end">Lợi nhuận</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Phương thức thanh toán</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-sm table-hover" id="payment_methods_table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Phương thức</th>
+                                                    <th class="text-end">Tổng tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
+                                            <h5 class="mb-0">Biểu đồ Doanh thu</h5>
+                                            <div class="d-flex gap-2 align-items-center flex-wrap">
+                                                <select id="revenue_period" class="form-select form-select-sm" style="width: 160px;">
+                                                    <option value="today" selected="selected">Hôm nay</option>
+                                                    <option value="yesterday">Hôm qua</option>
+                                                    <option value="last_7_days">7 ngày trước</option>
+                                                    <option value="this_week">Tuần này</option>
+                                                    <option value="last_week">Tuần trước</option>
+                                                    <option value="this_month">Tháng này</option>
+                                                    <option value="last_month">Tháng trước</option>
+                                                    <option value="custom">Tùy chỉnh</option>
+                                                </select>
+                                                <div class="dashboard-custom-range" data-filter-prefix="revenue">
+                                                    <input type="date" id="revenue_date_from" class="form-control form-control-sm" style="width: 140px;"/>
+                                                    <input type="date" id="revenue_date_to" class="form-control form-control-sm" style="width: 140px;"/>
+                                                    <button type="button" id="revenue_apply_filters" class="btn btn-sm btn-primary">
+                                                        Áp dụng
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-2 text-end">
+                                            <span style="font-size:12px;color:#888;">Kiểu:</span>
+                                            <a href="#" id="revenue_chart_bar" class="btn btn-sm btn-primary" style="padding:1px 8px;font-size:12px;">Cột</a>
+                                            <a href="#" id="revenue_chart_line" class="btn btn-sm btn-outline-secondary" style="padding:1px 8px;font-size:12px;">Đường</a>
+                                            <input type="hidden" id="revenue_chart_type" value="bar"/>
+                                        </div>
+                                        <div class="dashboard-chart">
+                                            <canvas id="revenue_chart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
+                                            <h5 class="mb-0">Biểu đồ Lợi nhuận</h5>
+                                            <div class="d-flex gap-2 align-items-center flex-wrap">
+                                                <select id="profit_period" class="form-select form-select-sm" style="width: 160px;">
+                                                    <option value="today" selected="selected">Hôm nay</option>
+                                                    <option value="yesterday">Hôm qua</option>
+                                                    <option value="last_7_days">7 ngày trước</option>
+                                                    <option value="this_week">Tuần này</option>
+                                                    <option value="last_week">Tuần trước</option>
+                                                    <option value="this_month">Tháng này</option>
+                                                    <option value="last_month">Tháng trước</option>
+                                                    <option value="custom">Tùy chỉnh</option>
+                                                </select>
+                                                <div class="dashboard-custom-range" data-filter-prefix="profit">
+                                                    <input type="date" id="profit_date_from" class="form-control form-control-sm" style="width: 140px;"/>
+                                                    <input type="date" id="profit_date_to" class="form-control form-control-sm" style="width: 140px;"/>
+                                                    <button type="button" id="profit_apply_filters" class="btn btn-sm btn-primary">
+                                                        Áp dụng
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-2 text-end">
+                                            <span style="font-size:12px;color:#888;">Kiểu:</span>
+                                            <a href="#" id="profit_chart_bar" class="btn btn-sm btn-primary" style="padding:1px 8px;font-size:12px;">Cột</a>
+                                            <a href="#" id="profit_chart_line" class="btn btn-sm btn-outline-secondary" style="padding:1px 8px;font-size:12px;">Đường</a>
+                                            <input type="hidden" id="profit_chart_type" value="bar"/>
+                                        </div>
+                                        <div class="dashboard-chart">
+                                            <canvas id="profit_chart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
+                                            <h5 class="mb-0">Top sản phẩm bán chạy</h5>
+                                            <div class="d-flex gap-2 align-items-center flex-wrap">
+                                                <select id="products_period" class="form-select form-select-sm" style="width: 160px;">
+                                                    <option value="today" selected="selected">Hôm nay</option>
+                                                    <option value="yesterday">Hôm qua</option>
+                                                    <option value="last_7_days">7 ngày trước</option>
+                                                    <option value="this_week">Tuần này</option>
+                                                    <option value="last_week">Tuần trước</option>
+                                                    <option value="this_month">Tháng này</option>
+                                                    <option value="last_month">Tháng trước</option>
+                                                    <option value="custom">Tùy chỉnh</option>
+                                                </select>
+                                                <div class="dashboard-custom-range" data-filter-prefix="products">
+                                                    <input type="date" id="products_date_from" class="form-control form-control-sm" style="width: 140px;"/>
+                                                    <input type="date" id="products_date_to" class="form-control form-control-sm" style="width: 140px;"/>
+                                                    <button type="button" id="products_apply_filters" class="btn btn-sm btn-primary">
+                                                        Áp dụng
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="dashboard-table">
+                                            <table class="table table-sm table-hover" id="products_table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sản phẩm</th>
+                                                        <th class="text-end">Số lượng bán</th>
+                                                        <th class="text-end">Doanh thu</th>
+                                                        <th class="text-end">Giá vốn</th>
+                                                        <th class="text-end">Lợi nhuận</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_dashboard" model="ir.actions.act_window">
+            <field name="name">Dashboard</field>
+            <field name="res_model">dashboard.mixin</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dashboard_form"/>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="menu_dashboard" name="Dashboard" action="action_dashboard" sequence="1" groups="dashboard.group_dashboard_user,base.group_system"/>
+    </data>
+</odoo>

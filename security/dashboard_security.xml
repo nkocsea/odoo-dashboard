@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="group_dashboard_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="comment">Dashboard User</field>
+        </record>
+
+        <record id="group_dashboard_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="comment">Dashboard Manager</field>
+            <field name="implied_ids" eval="[(4, ref('group_dashboard_user'))]"/>
+        </record>
+    </data>
+</odoo>

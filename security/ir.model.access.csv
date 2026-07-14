@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dashboard_mixin_user,access dashboard.mixin user,model_dashboard_mixin,base.group_user,1,0,0,0
+access_dashboard_mixin_manager,access dashboard.mixin manager,model_dashboard_mixin,base.group_system,1,1,1,1
+access_dashboard_mixin_dashboard_user,access dashboard.mixin dashboard user,model_dashboard_mixin,dashboard.group_dashboard_user,1,0,0,0
+access_dashboard_mixin_dashboard_manager,access dashboard.mixin dashboard manager,model_dashboard_mixin,dashboard.group_dashboard_manager,1,1,1,1
